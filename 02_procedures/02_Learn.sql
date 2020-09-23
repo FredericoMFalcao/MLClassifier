@@ -6,7 +6,7 @@ DELIMITER //
 CREATE PROCEDURE Learn (
 	IN _Domain VARCHAR(255),
 	IN Category VARCHAR(255),
-	IN Inputs VARCHAR(4096)
+	IN Inputs TEXT
 )
 BEGIN
 	DECLARE _CategoryId INT;
