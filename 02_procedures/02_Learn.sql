@@ -1,10 +1,10 @@
 -- --------------------
--- - 2. LEARN
+-- - 2. LEARNING
 -- --------------------
 DROP PROCEDURE IF EXISTS Learn;
 DELIMITER //
 CREATE PROCEDURE Learn (
-	IN Domain VARCHAR(255),
+	IN _Domain VARCHAR(255),
 	IN Category VARCHAR(255),
 	IN Inputs VARCHAR(4096)
 )
@@ -16,20 +16,23 @@ BEGIN
 
 	-- 1. Create new or update a "domain"
 	-- ------------------------------------
-	IF NOT EXISTS (SELECT * FROM Domains WHERE Name = Domain) THEN
-		INSERT INTO Domains (Name) VALUES (Domain);
+	IF NOT EXISTS (SELECT * FROM Domains WHERE Name = _Domain) THEN
+		INSERT INTO Domains (Name) VALUES (_Domain);
 	ELSE
-		UPDATE Domains SET Length = Length + 1 WHERE Name = Domain;
+		UPDATE Domains SET Length = Length + 1 WHERE Name = _Domain;
 	END IF;
 	
 	-- 2. Create new or update a "category"
 	-- ------------------------------------
-	IF NOT EXISTS (SELECT * FROM Categories WHERE Domain = Domain AND Name = Category) THEN
-		INSERT INTO Categories (Domain, Name) VALUES (Domain, Category);
+	IF NOT EXISTS (SELECT * FROM Categories WHERE Domain = _Domain AND Name = Category) THEN
+		INSERT INTO Categories (Domain, Name) VALUES (_Domain, Category);
+		SET _CategoryId = LAST_INSERT_ID();
+		INSERT INTO InputPerCategory (CategoryId, InputId) 
+			SELECT _CategoryId, id FROM Inputs WHERE Domain = _Domain;		
 	ELSE
-		UPDATE Categories SET Length = Length + 1 WHERE Domain = Domain AND Name = Category;
+		UPDATE Categories SET Length = Length + 1 WHERE Domain = _Domain AND Name = Category;
 	END IF;
-	SET _CategoryId = (SELECT id FROM Categories WHERE Domain = Domain AND Name = Category);
+	SET _CategoryId = (SELECT id FROM Categories WHERE Domain = _Domain AND Name = Category);
 	
 	-- 3. For each input, create new or update "InputPerCategory"
 	-- ------------------------------------
@@ -40,20 +43,20 @@ BEGIN
 
 		-- 3.2 Create new or update each "input";
 		-- ------------------------------------
-		IF NOT EXISTS (SELECT * FROM Inputs WHERE Domain = Domain AND Name = Input) THEN
-			INSERT INTO Inputs (Domain, Name) VALUES (Domain, Input);
+		IF NOT EXISTS (SELECT * FROM Inputs WHERE Domain = _Domain AND Name = Input) THEN
+			INSERT INTO Inputs (Domain, Name) VALUES (_Domain, Input);
+			SET _InputId = LAST_INSERT_ID();
+			INSERT INTO InputPerCategory (CategoryId, InputId) 
+				SELECT id, _InputId FROM Categories WHERE Domain = _Domain;
 		ELSE
-			UPDATE Inputs SET Length = Length + 1 WHERE Domain = Domain AND Name = Input;
+			UPDATE Inputs SET Length = Length + 1 WHERE Domain = _Domain AND Name = Input;
 		END IF;
-		SET _InputId = (SELECT id FROM Inputs WHERE Domain = Domain AND Name = Input);		
+		SET _InputId = (SELECT id FROM Inputs WHERE Domain = _Domain AND Name = Input);		
 		
 		-- 3.3 Create new or update each "InputPerCategory"
 		-- ------------------------------------
-		IF NOT EXISTS (SELECT * FROM InputPerCategory WHERE CategoryId = _CategoryId AND InputId = _InputId) THEN
-			INSERT INTO InputPerCategory (CategoryId, InputId) VALUES (_CategoryId, _InputId);
-		ELSE
-			UPDATE InputPerCategory SET Length = Length + 1 WHERE CategoryId = _CategoryId AND InputId = _InputId;
-		END IF;						
+		UPDATE InputPerCategory SET Length = Length + 1 WHERE CategoryId = _CategoryId AND InputId = _InputId;
+
 	SET i = i + 1; END WHILE;
 	
 	CALL CalculateCorrelations();
