@@ -8,7 +8,7 @@
 
 ## Learn 
 1. Train the algorithm by associating words that appear in documents (e.g. invoices) with a provided category (e.g. company name)
-  - `learn` stored procedure will "associate" a list of words with the known human-classified category. Expects: 
+  - `Learn(d,c,w)` stored procedure will "associate" a list of words with the known human-classified category. Expects: 
   - 1. *domain* - generic name of the type of documents being handled (e.g. invoices, salaryReceipts, etc...)
   - 2. *category* - name of the human-verified classified category of this document
   - 3. *words* - a JSON array with a list of (relevant) words contained in this document. Relevant words make the algorithm more effective.
@@ -19,7 +19,7 @@
   
 ## Predict
 1. Ask the algorithm to predict a given document's (e.g. invoice) category (e.g. issue company) based on a list of words present in the document
-  - `Predict` returns a table with the probability of a document belonging to each known category. Expects:
+  - `Predict(d,w)` returns a table with the probability of a document belonging to each known category. Expects:
   - 1. *domain* - generic name of the type of documents being handled (e.g. invoices, salaryReceipts, etc...)
   - 2. *words* - a JSON array with a list of (relevant) words contained in this document. Relevant words make the algorithm more effective.
   - example:
