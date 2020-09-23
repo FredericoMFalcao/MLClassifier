@@ -1,5 +1,5 @@
 -- --------------------
--- - 3. Predict
+-- - 3. Predicting
 -- --------------------
 DROP PROCEDURE IF EXISTS Predict;
 DELIMITER //
@@ -9,15 +9,14 @@ CREATE PROCEDURE Predict (
 )
 BEGIN
 
-	SELECT SUM(a.Correlation), c.Name
-	FROM InputPerCategory a
-	INNER JOIN Inputs b ON a.InputId = b.id
-	INNER JOIN Categories c ON a.CategoryId = c.id
-	WHERE JSON_CONTAINS(_Inputs, CONCAT('"',b.Name,'"'))
-	GROUP BY a.CategoryId, c.Name
-	ORDER BY SUM(a.Correlation) DESC
+	SELECT a.Name as Category, SUM(CASE WHEN b.Correlation IS NULL THEN 0 ELSE b.Correlation END) AS Probability
+	FROM Categories a
+	INNER JOIN InputPerCategory b 	ON a.id = b.CategoryId
+	INNER JOIN Inputs c		ON b.InputId = c.id AND JSON_CONTAINS(_Inputs, CONCAT('"',c.Name,'"'))
+	WHERE a.Domain = _Domain
+	GROUP BY a.id, a.Name
+
 	;
 END; 
 //
 DELIMITER ;
-
