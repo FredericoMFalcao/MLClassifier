@@ -9,11 +9,13 @@
 ## Requirements
 
 Running Ubuntu or Debian like Linux run:
+
 `sudo apt install mariadb-server mariadb-client`
 
 ## Instalation
 
 Run make install to deploy the schema into your MySQL/MariaDB server. The script will ask you for the name of the database.
+
 `make install`
 
 ## Usage
