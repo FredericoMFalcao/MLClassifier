@@ -59,7 +59,9 @@ BEGIN
 
 	SET i = i + 1; END WHILE;
 	
+	IF (SELECT AutoCalculateCorrelations FROM Domains WHERE Name = _Domain) THEN						      
 	CALL CalculateCorrelations();
+	END IF;
 	
 END;
 //
