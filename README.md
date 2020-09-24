@@ -6,7 +6,19 @@
 
 - The system assumes that you have your own way of converting a document (e.g. PDF) into a list of unique (relevant) words.
 
-## Learn 
+## Requirements
+
+Running Ubuntu or Debian like Linux run:
+`sudo apt install mariadb-server mariadb-client`
+
+## Instalation
+
+Run make install to deploy the schema into your MySQL/MariaDB server. The script will ask you for the name of the database.
+`make install`
+
+## Usage
+
+### Learn 
 1. Train the algorithm by associating words that appear in documents (e.g. invoices) with a provided category (e.g. company name)
   - `Learn(d,c,w)` stored procedure will "associate" a list of words with the known human-classified category. Expects: 
   - 1. *domain* - generic name of the type of documents being handled (e.g. invoices, salaryReceipts, etc...)
@@ -17,7 +29,7 @@
   - `CALL Learn('Invoices', 'Dell', '["Computer","September"]');`
   - `CALL Learn('Invoices', 'McDonalds', '["Hamburger", "Invoice"]');`
   
-## Predict
+### Predict
 1. Ask the algorithm to predict a given document's (e.g. invoice) category (e.g. issue company) based on a list of words present in the document
   - `Predict(d,w)` returns a table with the probability of a document belonging to each known category. Expects:
   - 1. *domain* - generic name of the type of documents being handled (e.g. invoices, salaryReceipts, etc...)
