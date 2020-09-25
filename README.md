@@ -1,6 +1,6 @@
 # MLClassifier (SQL)
 
-**Description:** A purely SQL machine learning system. Designed to handle OCR(ed) business documents (invoices, contracts, ...) under supervised conditions.
+**Description:** A purely SQL machine learning system. Designed to handle OCR(ed) business documents (invoices, contracts, ...) under supervised learning.
 
 *Tested on MariaDB 10.5.4.*
 
