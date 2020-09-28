@@ -18,15 +18,20 @@
 #include <mysql.h>
 #include <ctype.h>
 
-#ifdef HAVE_DLOPEN
-
-#if !defined(HAVE_GETHOSTBYADDR_R) || !defined(HAVE_SOLARIS_STYLE_GETHOST)
-static pthread_mutex_t LOCK_hostname;
-#endif
 
 
-my_bool myhelloworld_init(UDF_INIT *initid, UDF_ARGS *args, char *message);
-void myhelloworld_deinit(UDF_INIT *initid);
+my_bool myHelloWorld_init(UDF_INIT *initid, UDF_ARGS *args, char *message) {
+
+  if (args->arg_count != 1 || args->arg_type[0] != STRING_RESULT)
+  {
+    strcpy(message,"Wrong arguments to myHelloWorld_init;  use one argument as string");
+    return 1;
+  }
+  return 0;
+}
+void myHelloWorld_deinit(UDF_INIT *initid) {
+
+}
 
 /***************************************************************************
 ** UDF string function.
@@ -46,10 +51,11 @@ void myhelloworld_deinit(UDF_INIT *initid);
 ** This function should return a pointer to the result string.
 ** Normally this is 'result' but may also be an alloced string.
 ***************************************************************************/
-char *myhelloworld(UDF_INIT *initid __attribute__((unused)),
+char *myHelloWorld(UDF_INIT *initid __attribute__((unused)),
                UDF_ARGS *args, char *result, unsigned long *length,
                char *is_null, char *error __attribute__((unused)))
 {
-	strcpy(result, "Hello WORLD!");
+	strcpy(result, "Hello World!");
+        *length = strlen("Hello World!");
 	return result;
 }
