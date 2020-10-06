@@ -1,6 +1,6 @@
 SHELL=/bin/bash
 
-all: _compiled.sql prebuild
+all: prebuild _compiled.sql
 
 prebuild:
 	$(shell for i in $$(find . -name "prebuild.sh"); do /bin/bash "$$i"; done)

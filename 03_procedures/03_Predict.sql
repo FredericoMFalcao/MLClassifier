@@ -9,7 +9,9 @@ CREATE PROCEDURE Predict (
 )
 BEGIN
 
-	SELECT a.Name as Category, SUM(CASE WHEN b.Correlation IS NULL THEN 0 ELSE b.Correlation END) AS Probability
+	SELECT 
+		a.Name AS Category, 
+		AVG(b.Length / c.Length) AS Probability
 	FROM Categories a
 	INNER JOIN InputPerCategory b 	ON a.id = b.CategoryId
 	INNER JOIN Inputs c		ON b.InputId = c.id AND JSON_CONTAINS(_Inputs, CONCAT('"',c.Name,'"'))

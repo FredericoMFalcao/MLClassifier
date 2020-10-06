@@ -25,13 +25,12 @@ BEGIN
 	-- 2. Create new or update a "category"
 	-- ------------------------------------
 	IF NOT EXISTS (SELECT * FROM Categories WHERE Domain = _Domain AND Name = Category) THEN
+		-- 2.1 Create new category
 		INSERT INTO Categories (Domain, Name) VALUES (_Domain, Category);
-		SET _CategoryId = LAST_INSERT_ID();
-		INSERT INTO InputPerCategory (CategoryId, InputId) 
-			SELECT _CategoryId, id FROM Inputs WHERE Domain = _Domain;		
 	ELSE
 		UPDATE Categories SET Length = Length + 1 WHERE Domain = _Domain AND Name = Category;
 	END IF;
+	-- Fetch the ID number of the current category
 	SET _CategoryId = (SELECT id FROM Categories WHERE Domain = _Domain AND Name = Category);
 	
 	-- 3. For each input, create new or update "InputPerCategory"
@@ -46,6 +45,7 @@ BEGIN
 		IF NOT EXISTS (SELECT * FROM Inputs WHERE Domain = _Domain AND Name = Input) THEN
 			INSERT INTO Inputs (Domain, Name) VALUES (_Domain, Input);
 			SET _InputId = LAST_INSERT_ID();
+			-- Create a new InputPerCategory entry (if it's the 1st time this input appears with this category)
 			INSERT INTO InputPerCategory (CategoryId, InputId) 
 				SELECT id, _InputId FROM Categories WHERE Domain = _Domain;
 		ELSE
@@ -59,9 +59,6 @@ BEGIN
 
 	SET i = i + 1; END WHILE;
 	
-	IF (SELECT AutoCalculateCorrelations FROM Domains WHERE Name = _Domain) THEN						      
-	CALL CalculateCorrelations();
-	END IF;
 	
 END;
 //
