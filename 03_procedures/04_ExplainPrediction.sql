@@ -6,7 +6,7 @@ DELIMITER //
 CREATE PROCEDURE ExplainPrediction (
 	IN _Domain VARCHAR(255),
 	IN _CategoryName TEXT,
-	IN _Inputs INT
+	IN _Inputs TEXT
 )
 BEGIN
 
