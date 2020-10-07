@@ -11,4 +11,4 @@ CALL Learn('Invoices', 'Dell', '["Computer","September"]');
 CALL Learn('Invoices', 'McDonalds', '["Hamburger", "Invoice"]');
 
 -- Document #4: CocaCola's Invoices with keywords: "Drink", "dummy1", "dummy2"
-CALL Predict('Invoices', '["Drink", "Hamburger", "dummy2"]');
+CALL Predict('Invoices', '["Drink", "Hamburger", "dummy2"]',3);
