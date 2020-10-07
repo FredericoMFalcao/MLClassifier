@@ -20,8 +20,9 @@ BEGIN
            INNER JOIN Inputs c     ON a.InputId = c.id 
            WHERE JSON_CONTAINS(_Inputs, CONCAT('"',c.Name,'"'))  AND b.Name = _CategoryName
         )
-          SELECT  *
+          SELECT  InputName, Probability
           FROM ProbabilityPerWord
+          ORDER BY Probability DESC
         UNION ALL 
 	  SELECT 'AVERAGE', AVG(Probability)
 	  FROM ProbabilityPerWord
