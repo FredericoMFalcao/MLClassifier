@@ -42,9 +42,9 @@ BEGIN
 
 		-- 3.2 Create new or update each "input";
 		-- ------------------------------------
-		IF NOT EXISTS (SELECT * FROM Inputs WHERE Domain = _Domain AND Name = Input) THEN
+		IF NOT EXISTS (SELECT id FROM Inputs WHERE Domain = _Domain AND Name = Input) THEN
 			INSERT INTO Inputs (Domain, Name) VALUES (_Domain, Input);
-			SET _InputId = LAST_INSERT_ID();
+			SET _InputId = (SELECT id FROM Inputs WHERE Domain = _Domain AND Name = Input);
 			-- Create a new InputPerCategory entry (if it's the 1st time this input appears with this category)
 			INSERT INTO InputPerCategory (CategoryId, InputId) 
 				SELECT id, _InputId FROM Categories WHERE Domain = _Domain;
