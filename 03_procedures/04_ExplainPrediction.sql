@@ -22,11 +22,11 @@ BEGIN
         )
           SELECT  InputName, Probability
           FROM ProbabilityPerWord
-          ORDER BY Probability DESC
         UNION ALL 
-	  SELECT 'AVERAGE', AVG(Probability)
+	  SELECT '__AVERAGE', AVG(Probability)
 	  FROM ProbabilityPerWord
-	  GROUP BY 1;
+	  GROUP BY 1
+          ORDER BY Probability DESC;
         
 
 END;
