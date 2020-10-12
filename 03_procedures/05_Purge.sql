@@ -1,5 +1,5 @@
 -- --------------------
--- - 5. PurgeIrrelevantInputs
+-- - 5. Purge
 --
 --   Description: when an input shows up in more than "_Threshold" categories, eliminate it
 --                example: threshold = 3,
@@ -10,12 +10,6 @@
 --             
 -- --------------------
 
-DROP PROCEDURE IF EXISTS PurgeIrrelevantInputs;
-CREATE PROCEDURE PurgeIrrelevantInputs(IN _Threshold INT)
-DELETE FROM Inputs 
-WHERE id IN (
-	SELECT b.InputId
-	FROM InputPerCategory b
-	GROUP BY b.InputId
-	HAVING COUNT(b.CategoryId) > _Threshold
-);
+DROP PROCEDURE IF EXISTS Purge;
+CREATE PROCEDURE Purge(IN _Threshold INT)
+DELETE FROM Inputs WHERE LengthOfDifferentCategories > _Threshold;
