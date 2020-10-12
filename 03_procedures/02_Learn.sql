@@ -47,7 +47,8 @@ BEGIN
 			SET _InputId = (SELECT id FROM Inputs WHERE Domain = _Domain AND Name = Input);
 			-- Create a new InputPerCategory entry (if it's the 1st time this input appears with this category)
 			INSERT INTO InputPerCategory (CategoryId, InputId) 
-				SELECT id, _InputId FROM Categories WHERE Domain = _Domain;
+				VALUES (_CategoryId, _InputId);						  
+--				SELECT id, _InputId FROM Categories WHERE Domain = _Domain;
 		ELSE
 			UPDATE Inputs SET Length = Length + 1 WHERE Domain = _Domain AND Name = Input;
 		END IF;
