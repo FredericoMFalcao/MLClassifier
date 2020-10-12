@@ -10,6 +10,6 @@
 --             
 -- --------------------
 
-DROP PROCEDURE IF EXISTS Purge;
-CREATE PROCEDURE Purge(IN _Threshold INT)
+DROP PROCEDURE IF EXISTS `Purge`;
+CREATE PROCEDURE `Purge` (IN _Threshold INT)
 DELETE FROM Inputs WHERE LengthOfDifferentCategories > _Threshold;
