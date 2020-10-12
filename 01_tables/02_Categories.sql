@@ -4,7 +4,7 @@ CREATE TABLE Categories (
 	Name VARCHAR(255), -- e.g. "CocaCola", "Dell", "McDonalds"
 	Length INT DEFAULT 1,
 	FOREIGN KEY (DomainId) REFERENCES Domains(id) ON UPDATE CASCADE ON DELETE CASCADE,
-	UNIQUE (Domain, Name),
+	UNIQUE (DomainId, Name),
 	INDEX USING HASH (Name)
 );
 
