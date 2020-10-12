@@ -61,9 +61,10 @@ BEGIN
 --				SELECT id, _InputId FROM Categories WHERE DomainId = _DomainId;
 			-- Increase the number of "different categories" for this input
 			UPDATE Inputs SET LengthOfDifferentCategories = LengthOfDifferentCategories + 1 WHERE id = _InputId;
-		ELSE
-			UPDATE InputPerCategory SET Length = Length + 1 WHERE CategoryId = _CategoryId AND InputId = _InputId;
 		END IF;
+		-- Increase the Length
+		UPDATE InputPerCategory SET Length = Length + 1 WHERE CategoryId = _CategoryId AND InputId = _InputId;
+
 
 	SET i = i + 1; END WHILE;
 	
