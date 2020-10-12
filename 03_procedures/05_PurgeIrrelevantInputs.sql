@@ -15,7 +15,7 @@ CREATE PROCEDURE PurgeIrrelevantInputs(IN _Threshold INT)
 DELETE FROM Inputs 
 WHERE id IN (
 	SELECT b.InputId
-	FROM InputsPerCategory b
+	FROM InputPerCategory b
 	GROUP BY b.InputId
 	HAVING COUNT(b.CategoryId) > _Threshold
 );
