@@ -10,6 +10,7 @@
 --             
 -- --------------------
 
+DROP PROCEDURE IF EXISTS PurgeIrrelevantInputs;
 CREATE PROCEDURE PurgeIrrelevantInputs(IN _Threshold INT)
 DELETE FROM Inputs 
 WHERE id IN (
