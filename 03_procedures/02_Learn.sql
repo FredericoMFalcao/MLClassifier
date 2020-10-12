@@ -47,12 +47,6 @@ BEGIN
 		IF NOT EXISTS (SELECT id FROM Inputs WHERE DomainId = _DomainId AND Name = Input) THEN
 			INSERT INTO Inputs (DomainId, Name) VALUES (_DomainId, Input);
 			SET _InputId = (SELECT id FROM Inputs WHERE DomainId = _DomainId AND Name = Input);
-			-- Create a new InputPerCategory entry (if it's the 1st time this input appears with this category)
-			INSERT INTO InputPerCategory (CategoryId, InputId) 
-				VALUES (_CategoryId, _InputId);						  
---				SELECT id, _InputId FROM Categories WHERE DomainId = _DomainId;
-			-- Increase the number of "different categories" for this input
-			UPDATE Inputs SET LengthOfDifferentCategories = LengthOfDifferentCategories + 1 WHERE id = _InputId;
 		ELSE
 			UPDATE Inputs SET Length = Length + 1 WHERE DomainId = _DomainId AND Name = Input;
 		END IF;
@@ -60,7 +54,16 @@ BEGIN
 		
 		-- 3.3 Create new or update each "InputPerCategory"
 		-- ------------------------------------
-		UPDATE InputPerCategory SET Length = Length + 1 WHERE CategoryId = _CategoryId AND InputId = _InputId;
+		IF NOT EXISTS (SELECT * FROM InputPerCategory WHERE CategoryId = _CategoryId AND InputId = _InputId) THEN
+			-- Create a new InputPerCategory entry (if it's the 1st time this input appears with this category)
+			INSERT INTO InputPerCategory (CategoryId, InputId) 
+				VALUES (_CategoryId, _InputId);						  
+--				SELECT id, _InputId FROM Categories WHERE DomainId = _DomainId;
+			-- Increase the number of "different categories" for this input
+			UPDATE Inputs SET LengthOfDifferentCategories = LengthOfDifferentCategories + 1 WHERE id = _InputId;
+		ELSE
+			UPDATE InputPerCategory SET Length = Length + 1 WHERE CategoryId = _CategoryId AND InputId = _InputId;
+		END IF;
 
 	SET i = i + 1; END WHILE;
 	
