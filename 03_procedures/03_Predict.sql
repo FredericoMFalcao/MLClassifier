@@ -23,7 +23,8 @@ BEGIN
               INNER JOIN InputPerCategory b   ON a.id = b.CategoryId
               INNER JOIN Inputs c             ON b.InputId = c.id 
               INNER JOIN WordList d           ON c.id = d.id
-              WHERE a.Domain = _Domain
+	      INNER JOIN Domains e            ON a.DomainId = e.id
+              WHERE e.Name = _DomainId
               GROUP BY a.id, a.Name
    ),
     TotalOfSum AS (
