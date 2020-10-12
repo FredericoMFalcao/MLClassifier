@@ -24,7 +24,7 @@ BEGIN
               INNER JOIN Inputs c             ON b.InputId = c.id 
               INNER JOIN WordList d           ON c.id = d.id
 	      INNER JOIN Domains e            ON a.DomainId = e.id
-              WHERE e.Name = _DomainId
+              WHERE e.Name = _Domain
               GROUP BY a.id, a.Name
    ),
     TotalOfSum AS (
