@@ -1,6 +1,6 @@
 CREATE TABLE Domains (
 	id INT PRIMARY KEY AUTO_INCREMENT,
-	Name VARCHAR(255), -- e.g. "Invoices", "SalaryReceipts"
+	Name VARCHAR(255) NOT NULL, -- e.g. "Invoices", "SalaryReceipts"
 	Length INT DEFAULT 1, -- i.e. no of learning data points for this domain
 
 	-- AutoCalculateCorrelations:
