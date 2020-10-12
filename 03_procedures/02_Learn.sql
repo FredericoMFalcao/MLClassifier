@@ -60,7 +60,7 @@ BEGIN
 
 	SET i = i + 1; END WHILE;
 	
-        CALL PurgeIrrelevantInputs(3);
+        -- CALL PurgeIrrelevantInputs(3);
 	
 END;
 //
