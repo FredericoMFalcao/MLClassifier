@@ -7,5 +7,5 @@ CREATE TABLE InputPerCategory (
 	INDEX USING HASH (CategoryId),
 	INDEX USING HASH (InputId)
 
-);
+)ENGINE = MYISAM;
 

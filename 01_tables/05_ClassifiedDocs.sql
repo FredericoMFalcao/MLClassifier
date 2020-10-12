@@ -4,7 +4,7 @@ CREATE TABLE ClassifiedDocs (
 	Classification VARCHAR(255) NOT NULL,
 	Words TEXT NOT NULL,
 	FOREIGN KEY (Domain) REFERENCES Domains(Name)
-);
+)ENGINE = MYISAM;
 
 CREATE TRIGGER TeachMLAlgo AFTER INSERT ON ClassifiedDocs
  FOR EACH ROW CALL Learn(NEW.Domain, New.Classification, NEW.Words);
