@@ -7,5 +7,5 @@ CREATE TABLE Domains (
 	-- useful to bath insert data on first upload and not being slowed down by a recalculation on every row
 	AutoCalculateCorrelations INT DEFAULT 1, 
 	PRIMARY KEY (Name)
-)ENGINE = MYISAM;
+);
 
