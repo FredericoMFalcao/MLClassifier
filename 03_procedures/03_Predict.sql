@@ -10,23 +10,33 @@ CREATE PROCEDURE Predict (
 )
 BEGIN
 
-	WITH WordList AS ( 
-	        SELECT a.id 
-	        FROM Inputs a 
-	        WHERE JSON_CONTAINS(_Inputs, CONCAT('"',a.Name,'"'))
-	)
-	SELECT 
-                a.Name AS Category, 
-                AVG(b.Length / c.Length) AS Probability
-	        FROM Categories a
-	        INNER JOIN InputPerCategory b   ON a.id = b.CategoryId
-	        INNER JOIN Inputs c             ON b.InputId = c.id 
-	        INNER JOIN WordList d           ON c.id = d.id
-	        WHERE a.Domain = _Domain
-	        GROUP BY a.id, a.Name
-	        ORDER BY AVG(b.Length / c.Length) DESC
-		LIMIT _LimitRows
-	;
+   WITH WordList AS ( 
+           SELECT a.id 
+           FROM Inputs a 
+           WHERE JSON_CONTAINS(_Inputs, CONCAT('"',a.Name,'"'))
+   ),
+   UnNormalizedProbabilities AS (
+      SELECT 
+                   a.Name AS Category, 
+                   AVG(b.Length / c.Length) AS Probability
+              FROM Categories a
+              INNER JOIN InputPerCategory b   ON a.id = b.CategoryId
+              INNER JOIN Inputs c             ON b.InputId = c.id 
+              INNER JOIN WordList d           ON c.id = d.id
+              WHERE a.Domain = _Domain
+              GROUP BY a.id, a.Name
+   ),
+    TotalOfSum AS (
+       SELECT SUM(Probability) as Total FROM UnNormalizedProbabilities
+    )
+   SELECT
+      a.Category,
+      a.Probability / b.Total
+   FROM UnNormalizedProbabilities a
+   INNER JOIN TotalOfSum b
+   ORDER BY a.Probability DESC
+   LIMIT _LimitRows
+   ;
 
 
 END; 
