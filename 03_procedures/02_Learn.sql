@@ -26,7 +26,7 @@ BEGIN
 	
 	-- 2. Create new or update a "category"
 	-- ------------------------------------
-	IF NOT EXISTS (SELECT * FROM Categories WHERE Domain = _Domain AND Name = _Category) THEN
+	IF NOT EXISTS (SELECT * FROM Categories WHERE DomainId = _DomainId AND Name = _Category) THEN
 		-- 2.1 Create new category
 		INSERT INTO Categories (DomainId, Name) VALUES (_DomainId, _Category);
 	ELSE
@@ -50,7 +50,7 @@ BEGIN
 			-- Create a new InputPerCategory entry (if it's the 1st time this input appears with this category)
 			INSERT INTO InputPerCategory (CategoryId, InputId) 
 				VALUES (_CategoryId, _InputId);						  
---				SELECT id, _InputId FROM Categories WHERE Domain = _Domain;
+--				SELECT id, _InputId FROM Categories WHERE DomainId = _DomainId;
 		ELSE
 			UPDATE Inputs SET Length = Length + 1 WHERE DomainId = _DomainId AND Name = Input;
 		END IF;
