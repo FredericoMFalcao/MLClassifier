@@ -16,5 +16,5 @@ WHERE id IN (
 	SELECT b.InputId
 	FROM InputPerCategory b
 	GROUP BY b.InputId
-	HAVING COUNT(a.CategoryId) > _Threshold
+	HAVING COUNT(b.CategoryId) > _Threshold
 );
