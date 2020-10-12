@@ -51,6 +51,8 @@ BEGIN
 			INSERT INTO InputPerCategory (CategoryId, InputId) 
 				VALUES (_CategoryId, _InputId);						  
 --				SELECT id, _InputId FROM Categories WHERE DomainId = _DomainId;
+			-- Increase the number of "different categories" for this input
+			UPDATE Inputs SET LengthOfDifferentCategories = LengthOfDifferentCategories + 1 WHERE id = _InputId;
 		ELSE
 			UPDATE Inputs SET Length = Length + 1 WHERE DomainId = _DomainId AND Name = Input;
 		END IF;
