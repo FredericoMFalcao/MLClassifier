@@ -6,7 +6,7 @@ CREATE TABLE InputPerCategory (
 	FOREIGN KEY (InputId) REFERENCES Inputs(id) ON UPDATE CASCADE ON DELETE CASCADE,
 	INDEX USING HASH (CategoryId),
 	INDEX USING HASH (InputId),
-	INDEX (InputId, CategoryId),
+	INDEX (InputId, CategoryId)
 
 );
 
