@@ -21,7 +21,7 @@ BEGIN
 		UPDATE Domains SET Length = Length + 1 WHERE Name = _Domain;
 	END IF;
 	-- Fetch the ID number of the current category
-	SET _DomainId = (SELECT id FROM Domains WHERE Name = _DomainId);
+	SET _DomainId = (SELECT id FROM Domains WHERE Name = _Domain);
 
 	
 	-- 2. Create new or update a "category"
