@@ -32,7 +32,7 @@ BEGIN
     )
    SELECT
       a.Category,
-      a.Probability / b.Total
+      a.Probability / b.Total AS Probability
    FROM UnNormalizedProbabilities a
    INNER JOIN TotalOfSum b
    ORDER BY a.Probability DESC
