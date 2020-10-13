@@ -41,6 +41,9 @@ BEGIN
 		-- 3.1 Extract current "input"
 		-- ------------------------------------
 		SET Input = JSON_VALUE(_Inputs, CONCAT("$[",i,"]"));
+                IF EXISTS (SELECT WrongWord FROM Mappings WHERE WrongWord = Input) THEN
+                    SET INPUT = (SELECT CorrectWord FROM Mappings WHERE WrongWord = Input)
+                END IF;
 
 		-- 3.2 Create new or update each "input";
 		-- ------------------------------------
