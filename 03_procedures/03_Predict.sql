@@ -18,7 +18,7 @@ BEGIN
    UnNormalizedProbabilities AS (
       SELECT 
                    a.Name AS Category, 
-                   AVG(b.Length / c.Length) AS Probability
+                   SUM(b.Length / c.Length) AS Probability
               FROM Categories a
               INNER JOIN InputPerCategory b   ON a.id = b.CategoryId
               INNER JOIN Inputs c             ON b.InputId = c.id 
