@@ -1,17 +1,17 @@
-SHELL=/bin/bash
+CC=gcc -g
 
-all: prebuild _compiled.sql
+all: predict learn db.h
 
-prebuild:
-	$(shell for i in $$(find . -name "prebuild.sh"); do /bin/bash "$$i"; done)
+predict: predict.c db.h
+	$(CC) predict.c -o predict
 
-_compiled.sql: $(shell find . -name "*.sql -not _compiled.sql")
-	$(shell cat $$(find . -name "*.sql" | sort) > _compiled.sql)
-
-install:
-	@read -p 'What is the database name for the MLCategorizer? ' DBNAME;\
-	mysql -e "DROP DATABASE IF EXISTS $$DBNAME; CREATE DATABASE $$DBNAME";\
-	cat _compiled.sql | mysql $$DBNAME
+learn: learn.c db.h
+	$(CC) learn.c -o learn
 
 clean:
-	rm _compiled.sql
+	rm predict learn db.bin sqlite3.db
+init:
+	./ml init
+
+install-ubuntu-requirements:
+	apt install sqlite3 bash gcc
