@@ -3,10 +3,10 @@ CC=gcc -g
 all: bin/predict bin/learn src/db.h
 	./init.sh
 
-predict: src/predict.c src/db.h
+bin/predict: src/predict.c src/db.h
 	$(CC) src/predict.c -o bin/predict
 
-learn: src/learn.c src/db.h
+bin/learn: src/learn.c src/db.h
 	$(CC) src/learn.c -o bin/learn
 
 clean:
@@ -16,3 +16,6 @@ clean:
 
 install-docker-requirements:
 	apk add gcc make libc-dev
+	
+install-ubuntu-requirements:
+	apt install sqlite3
