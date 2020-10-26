@@ -1,17 +1,18 @@
 CC=gcc -g
 
-all: predict learn db.h
+all: bin/predict bin/learn src/db.h
+	./init.sh
 
-predict: predict.c db.h
-	$(CC) predict.c -o predict
+predict: src/predict.c src/db.h
+	$(CC) src/predict.c -o bin/predict
 
-learn: learn.c db.h
-	$(CC) learn.c -o learn
+learn: src/learn.c src/db.h
+	$(CC) src/learn.c -o bin/learn
 
 clean:
-	rm predict learn db.bin sqlite3.db
-init:
-	./ml init
+	rm data/*
+	rm bin/*
 
-install-ubuntu-requirements:
-	apt install sqlite3 bash gcc
+
+install-docker-requirements:
+	apk add gcc make libc-dev
