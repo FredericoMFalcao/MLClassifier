@@ -1,4 +1,5 @@
 all: main.c implementation.c
+	ctags $$(find . -name "*.c")
 	gcc -g -Wall -o ml main.c
 
 implementation.c : implementation.c.php

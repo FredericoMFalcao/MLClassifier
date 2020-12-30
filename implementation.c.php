@@ -53,7 +53,7 @@ int {{=$mode}}Correlation(unsigned int categoryIdx, unsigned int inputIdx, Corre
 	long int offset = 0;
 	offset += sizeof(Category) * MAX_NO_OF_CATEGORY;
 	offset += sizeof(Input) * MAX_NO_OF_INPUT;
-	offset += sizeof(Correlation) * MAX_NO_OF_CATEGORY * inputIdx + categoryIdx;
+	offset += sizeof(Correlation) * ( MAX_NO_OF_CATEGORY * inputIdx + categoryIdx );
 	fseek(fp, offset, SEEK_SET);
 	{{ if ( $mode == "load") : }}
 	return fread(correlation, sizeof(Correlation), 1, fp);

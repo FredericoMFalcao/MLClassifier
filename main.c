@@ -43,6 +43,7 @@ typedef struct {
 	unsigned int length;
 } Correlation;
 int loadCorrelation(unsigned int categoryIdx, unsigned int inputIdx, Correlation *correlation);
+int saveCorrelation(unsigned int categoryIdx, unsigned int inputIdx, Correlation *correlation);
 
 /* 4. Output results */
 typedef struct {
@@ -106,7 +107,7 @@ int main(int argc, char *argv[]) {
 		while(!feof(stdin)) {
 			if (CategoryIdx == -1)
 			{	
-				scanf("%s", text);
+				if(scanf("%s", text) < 1) break;
 				CategoryIdx = CategoryIdxByName(text);
 		
 				
@@ -123,7 +124,7 @@ int main(int argc, char *argv[]) {
 				continue;
 			}
 				
-			scanf("%s", text);
+			if(!scanf("%s", text)) break;
 			InputIdx = InputIdxByName(text);
 
 			
@@ -168,7 +169,7 @@ int main(int argc, char *argv[]) {
 		/* 2. Calculate the output */
 		while(!feof(stdin)) {
 			unsigned int InputIdx;
-			scanf("%s", text);
+			if(scanf("%s", text) < 1) break;
 			InputIdx = InputIdxByName(text);
 			for (int CategoryIdx=0; CategoryIdx < MAX_NO_OF_CATEGORY; CategoryIdx++) {
 				loadCorrelation(CategoryIdx, InputIdx, &correlation);

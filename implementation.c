@@ -87,7 +87,7 @@ int loadCorrelation(unsigned int categoryIdx, unsigned int inputIdx, Correlation
 	long int offset = 0;
 	offset += sizeof(Category) * MAX_NO_OF_CATEGORY;
 	offset += sizeof(Input) * MAX_NO_OF_INPUT;
-	offset += sizeof(Correlation) * MAX_NO_OF_CATEGORY * inputIdx + categoryIdx;
+	offset += sizeof(Correlation) * ( MAX_NO_OF_CATEGORY * inputIdx + categoryIdx );
 	fseek(fp, offset, SEEK_SET);
 		return fread(correlation, sizeof(Correlation), 1, fp);
 	
@@ -96,21 +96,20 @@ int saveCorrelation(unsigned int categoryIdx, unsigned int inputIdx, Correlation
 	long int offset = 0;
 	offset += sizeof(Category) * MAX_NO_OF_CATEGORY;
 	offset += sizeof(Input) * MAX_NO_OF_INPUT;
-	offset += sizeof(Correlation) * MAX_NO_OF_CATEGORY * inputIdx + categoryIdx;
+	offset += sizeof(Correlation) * ( MAX_NO_OF_CATEGORY * inputIdx + categoryIdx );
 	fseek(fp, offset, SEEK_SET);
 		return fwrite(correlation, sizeof(Correlation), 1, fp);
 	
 }
 void normalizeOutputResult(OutputResultLine *o) {
-	double max_value = 0;
-	/* 1. Find the maximum */
+	double total_sum = 0;
+	/* 1. Sum all */
 	for(int i=0; i<MAX_NO_OF_CATEGORY; i++)
-		if (o[i].correlation > max_value) 
-			max_value = o[i].correlation;
+		total_sum += o[i].correlation;
 
-	if (max_value == 0) return; /* avoid division by zero */
+	if (total_sum == 0) return; /* avoid division by zero */
 
 	/* 2. Divide every element by the maximum */
 	for(int i=0; i<MAX_NO_OF_CATEGORY; i++)
-		o[i].correlation /= max_value;
+		o[i].correlation /= total_sum;
 }
