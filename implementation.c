@@ -4,13 +4,13 @@
 *   0. CATEGORY     
 *
 */
-int loadCategory( unsigned int idx, Category* category) {
+int loadCategoryAtIndex( unsigned int idx, Category* category) {
 	long int offset = 0;
 		offset += sizeof(Category) * idx;
 	fseek(fp, offset, SEEK_SET);
 		return fread(category, sizeof(Category), 1, fp);
 	}
-int saveCategory( unsigned int idx, Category* category) {
+int saveCategoryAtIndex( unsigned int idx, Category* category) {
 	long int offset = 0;
 		offset += sizeof(Category) * idx;
 	fseek(fp, offset, SEEK_SET);
@@ -21,17 +21,17 @@ unsigned int CategoryIdxByName(char *text) {
 	Category el;
 	/* 1. Read an existing element  */
 	for (int i=0; i< MAX_NO_OF_CATEGORY; i++) {
-		loadCategory(i,&el);
+		loadCategoryAtIndex(i,&el);
 		if (strcmp(el.textValue, text) == 0)
 			return i;
 	}
 	/* 2. Create a new entry */
 	for (int i=0; i< MAX_NO_OF_CATEGORY; i++) {
-		loadCategory(i,&el);
+		loadCategoryAtIndex(i,&el);
 		if (strlen(el.textValue) == 0) {
 			el.index = i;
 			strncpy(el.textValue, text, 255);
-			saveCategory(i, &el);
+			saveCategoryAtIndex(i, &el);
 			return el.index;
 		}
 	}
@@ -42,14 +42,14 @@ unsigned int CategoryIdxByName(char *text) {
 *   1. INPUT     
 *
 */
-int loadInput( unsigned int idx, Input* input) {
+int loadInputAtIndex( unsigned int idx, Input* input) {
 	long int offset = 0;
 		offset += sizeof(Category) * MAX_NO_OF_CATEGORY;
 		offset += sizeof(Input) * idx;
 	fseek(fp, offset, SEEK_SET);
 		return fread(input, sizeof(Input), 1, fp);
 	}
-int saveInput( unsigned int idx, Input* input) {
+int saveInputAtIndex( unsigned int idx, Input* input) {
 	long int offset = 0;
 		offset += sizeof(Category) * MAX_NO_OF_CATEGORY;
 		offset += sizeof(Input) * idx;
@@ -61,17 +61,17 @@ unsigned int InputIdxByName(char *text) {
 	Input el;
 	/* 1. Read an existing element  */
 	for (int i=0; i< MAX_NO_OF_INPUT; i++) {
-		loadInput(i,&el);
+		loadInputAtIndex(i,&el);
 		if (strcmp(el.textValue, text) == 0)
 			return i;
 	}
 	/* 2. Create a new entry */
 	for (int i=0; i< MAX_NO_OF_INPUT; i++) {
-		loadInput(i,&el);
+		loadInputAtIndex(i,&el);
 		if (strlen(el.textValue) == 0) {
 			el.index = i;
 			strncpy(el.textValue, text, 255);
-			saveInput(i, &el);
+			saveInputAtIndex(i, &el);
 			return el.index;
 		}
 	}
@@ -102,14 +102,15 @@ int saveCorrelation(unsigned int categoryIdx, unsigned int inputIdx, Correlation
 	
 }
 void normalizeOutputResult(OutputResultLine *o) {
-	double total_sum = 0;
-	/* 1. Sum all */
+	double max_value = 0;
+	/* 1. Find the maximum */
 	for(int i=0; i<MAX_NO_OF_CATEGORY; i++)
-		total_sum += o[i].correlation;
+		if (o[i].correlation > max_value) 
+			max_value = o[i].correlation;
 
-	if (total_sum == 0) return; /* avoid division by zero */
+	if (max_value == 0) return; /* avoid division by zero */
 
 	/* 2. Divide every element by the maximum */
 	for(int i=0; i<MAX_NO_OF_CATEGORY; i++)
-		o[i].correlation /= total_sum;
+		o[i].correlation /= max_value;
 }

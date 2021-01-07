@@ -6,7 +6,7 @@
 *
 */
 {{ foreach(["load", "save"] as $mode) : }}
-int {{=$mode}}{{=$type}}( unsigned int idx, {{=$type}}* {{=strtolower($type)}}) {
+int {{=$mode}}{{=$type}}AtIndex( unsigned int idx, {{=$type}}* {{=strtolower($type)}}) {
 	long int offset = 0;
 	{{ if ( $type == "Input" ) : }}
 	offset += sizeof(Category) * MAX_NO_OF_CATEGORY;
@@ -25,17 +25,17 @@ unsigned int {{=$type}}IdxByName(char *text) {
 	{{=$type}} el;
 	/* 1. Read an existing element  */
 	for (int i=0; i< MAX_NO_OF_{{=strtoupper($type)}}; i++) {
-		load{{=$type}}(i,&el);
+		load{{=$type}}AtIndex(i,&el);
 		if (strcmp(el.textValue, text) == 0)
 			return i;
 	}
 	/* 2. Create a new entry */
 	for (int i=0; i< MAX_NO_OF_{{=strtoupper($type)}}; i++) {
-		load{{=$type}}(i,&el);
+		load{{=$type}}AtIndex(i,&el);
 		if (strlen(el.textValue) == 0) {
 			el.index = i;
 			strncpy(el.textValue, text, 255);
-			save{{=$type}}(i, &el);
+			save{{=$type}}AtIndex(i, &el);
 			return el.index;
 		}
 	}

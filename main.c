@@ -32,9 +32,11 @@ typedef struct {
 	unsigned int index;
 	char textValue[256];
 	unsigned int length;
+	unsigned int nextR;
+	unsigned int nextL;
 }Input;
 unsigned int InputIdxByName(char *text);
-int loadInput(unsigned int idx, Input* input);
+int loadInputAtIndex(unsigned int idx, Input* input);
 
 /* 3. Correlations - Inputs per category */
 typedef struct {
@@ -114,11 +116,11 @@ int main(int argc, char *argv[]) {
 
 				/* 1. Deal with the Category */
 				/* 1.1 Read the current input length */
-				loadCategory(CategoryIdx, &category);
+				loadCategoryAtIndex(CategoryIdx, &category);
 				/* 1.2 Increment the current category length */
 				category.length++;
 				/* 1.3 Write to the file */
-				saveCategory(CategoryIdx, &category);
+				saveCategoryAtIndex(CategoryIdx, &category);
 
 
 				continue;
@@ -131,11 +133,11 @@ int main(int argc, char *argv[]) {
 
 			/* 2. Deal with the Input */
 			/* 2.1 Read the current input length */
-			loadInput(InputIdx, &input);
+			loadInputAtIndex(InputIdx, &input);
 			/* 2.2 Increment the current input length */
 			input.length++;
 			/* 2.3 Write to the file */
-			saveInput(InputIdx, &input);
+			saveInputAtIndex(InputIdx, &input);
 
 			
 
@@ -173,7 +175,7 @@ int main(int argc, char *argv[]) {
 			InputIdx = InputIdxByName(text);
 			for (int CategoryIdx=0; CategoryIdx < MAX_NO_OF_CATEGORY; CategoryIdx++) {
 				loadCorrelation(CategoryIdx, InputIdx, &correlation);
-				loadCategory(CategoryIdx, &category);
+				loadCategoryAtIndex(CategoryIdx, &category);
 				
 				if (category.length) /* avoid divide by zero */
 					output[CategoryIdx].correlation += (float)correlation.length / (float)category.length;
@@ -188,7 +190,7 @@ int main(int argc, char *argv[]) {
 
 		/* 5. Print the output */
 		for (int i=0; i < MAX_NO_OF_CATEGORY; i++) {
-			loadCategory(output[i].CategoryIdx, &category);
+			loadCategoryAtIndex(output[i].CategoryIdx, &category);
 			printf("( %lf ) %s\n", output[i].correlation, category.textValue);
 		}
 	}
